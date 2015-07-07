@@ -11,23 +11,24 @@ def gaussian(x, mu, sigma):
 
 def main():
     def write_to_xls(ss, avs, asd):
-        fn = filename.text() + '.xlsx'
-        workbook = xlsxwriter.Workbook(fn)
-        worktable = workbook.add_worksheet()
-        worktable.set_column('A:B', 20)
-        l = len(ss)
-        format1 = workbook.add_format({'bold': True, 'align': 'right'})
+        fn, fl = QtGui.QFileDialog.getSaveFileNameAndFilter(filter='Excel Files (*.xlsx *.xls)')
+        if len(fn) > 0:
+            workbook = xlsxwriter.Workbook(fn)
+            worktable = workbook.add_worksheet()
+            worktable.set_column('A:B', 20)
+            l = len(ss)
+            format1 = workbook.add_format({'bold': True, 'align': 'right'})
 
-        worktable.write('A1', '#', format1)
-        worktable.write('B1', 'Size', format1)
-        for i in range(l):
-            worktable.write('A{}'.format(i+2), i+1)
-            worktable.write('B{}'.format(i+2), ss[i])
-        worktable.write('A{}'.format(l+4), 'average size', format1)
-        worktable.write('B{}'.format(l+4), avs)
-        worktable.write('A{}'.format(l+5), 'standart deviation', format1)
-        worktable.write('B{}'.format(l+5), asd)
-        workbook.close()
+            worktable.write('A1', '#', format1)
+            worktable.write('B1', 'Size', format1)
+            for i in range(l):
+                worktable.write('A{}'.format(i+2), i+1)
+                worktable.write('B{}'.format(i+2), ss[i])
+            worktable.write('A{}'.format(l+4), 'average size', format1)
+            worktable.write('B{}'.format(l+4), avs)
+            worktable.write('A{}'.format(l+5), 'standart deviation', format1)
+            worktable.write('B{}'.format(l+5), asd)
+            workbook.close()
 
     def read_arguments():
         try:
@@ -117,12 +118,13 @@ def main():
     calc_btn = QtGui.QPushButton('Calculate\n Normal Distribution')
     calc_btn.clicked.connect(draw)
     sizes_list = QtGui.QTextEdit()
-    filename_lbl = QtGui.QLabel()
-    filename_lbl.setText('XLS file name')
-    filename = QtGui.QLineEdit()
-    filename.setText('WorkTable')
-    filename.setMinimumWidth(120)
+    sizes_list.setMinimumWidth(150)
+    #filename_lbl = QtGui.QLabel()
+    #filename_lbl.setText('XLS file name')
+    #save_to_btn = QtGui.QPushButton('Save results to')
+    #save_to_btn.clicked.connect(write_to_xls)
     plot_widget = pg.PlotWidget()
+    plot_widget.setMinimumSize(400, 300)
     layout = QtGui.QGridLayout()
     w.setLayout(layout)
 
@@ -134,10 +136,9 @@ def main():
     layout.addWidget(accuracy, 2, 1)
     layout.addWidget(count_lbl, 3, 0)
     layout.addWidget(count, 3, 1)
-    layout.addWidget(filename_lbl, 4, 0)
-    layout.addWidget(filename, 4, 1)
-    layout.addWidget(calc_btn, 5, 0, 1, 2)
-    layout.addWidget(sizes_list, 6, 0, 1, 2)
+    layout.addWidget(calc_btn, 4, 0, 1, 2)
+    layout.addWidget(sizes_list, 5, 0, 1, 2)
+    #layout.addWidget(save_to_btn, 6, 0, 1, 2)
     layout.addWidget(plot_widget, 0, 2, 7, 1)
 
     w.show()
