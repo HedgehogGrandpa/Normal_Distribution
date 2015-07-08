@@ -46,7 +46,7 @@ def main():
         if rb < lb:
             rb, lb = lb, rb
         try:
-            accur = int(accuracy.text())
+            accur = accuracy.currentIndex()
         except:
             accur = 0
             sizes_list.append('used default accuracy: 0')
@@ -83,20 +83,12 @@ def main():
             plot_widget.clear()
             plot_widget.plot(range(1, c+1), sizes)
             write_to_xls(sizes, average_size, asd)
-
-            '''
-            sizes_count = []
-            for size in sorted(set(sizes)):
-                size_count = sizes.count(size)
-                sizes_list.append('{}: {} things'.format(size, size_count))
-                sizes_count.append(size_count)
-            plot2 = pg.plot(sorted(set(sizes)), sizes_count)
-            '''
         except Exception as e:
             sizes_list.append(str(e))
 
     app = QtGui.QApplication([])
     w = QtGui.QWidget()
+    w.setWindowTitle('Normal Distribution')
     w.resize(500, 400)
     w.move(0, 0)
     left_border_lbl = QtGui.QLabel()
@@ -109,8 +101,8 @@ def main():
     right_border.setText('200')
     accuracy_lbl = QtGui.QLabel()
     accuracy_lbl.setText('Accuracy:')
-    accuracy = QtGui.QLineEdit()
-    accuracy.setText('0')
+    accuracy = QtGui.QComboBox()
+    accuracy.addItems(['0', '0.0', '0.00', '0.000'])
     count_lbl = QtGui.QLabel()
     count_lbl.setText('quantity')
     count = QtGui.QLineEdit()
@@ -118,11 +110,7 @@ def main():
     calc_btn = QtGui.QPushButton('Calculate\n Normal Distribution')
     calc_btn.clicked.connect(draw)
     sizes_list = QtGui.QTextEdit()
-    sizes_list.setMinimumWidth(150)
-    #filename_lbl = QtGui.QLabel()
-    #filename_lbl.setText('XLS file name')
-    #save_to_btn = QtGui.QPushButton('Save results to')
-    #save_to_btn.clicked.connect(write_to_xls)
+    sizes_list.setMinimumWidth(200)
     plot_widget = pg.PlotWidget()
     plot_widget.setMinimumSize(400, 300)
     layout = QtGui.QGridLayout()
@@ -138,7 +126,6 @@ def main():
     layout.addWidget(count, 3, 1)
     layout.addWidget(calc_btn, 4, 0, 1, 2)
     layout.addWidget(sizes_list, 5, 0, 1, 2)
-    #layout.addWidget(save_to_btn, 6, 0, 1, 2)
     layout.addWidget(plot_widget, 0, 2, 7, 1)
 
     w.show()
